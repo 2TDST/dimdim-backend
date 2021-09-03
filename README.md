@@ -38,7 +38,7 @@ git clone https://github.com/2TDST/dimdim-backend.git
 **2.0 Running local Docker Mysql Container**
 
 ```bash
-$ docker run --name fiap-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql
+$ docker run --name fiap-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=ag_dimdim_db -d mysql
 ```
 
 **3. Change mysql username and password as per your installation**
