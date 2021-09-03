@@ -1,9 +1,9 @@
-FROM openjdk:11-jre-slim
+FROM maven:3.8.1-jdk-11
 
-ARG JAR_FILE=target/*.jar
+WORKDIR /dimdim-api
 
-COPY ${JAR_FILE} app.jar
+COPY . .
 
-EXPOSE 8080
+RUN mvn clean install
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+CMD mvn spring-boot:run
