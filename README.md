@@ -69,8 +69,6 @@ You can test them using postman or any other rest client.
 
 **1.0 Executando em seu local Docker, o DIMDIM-BACKEND Container**
 
-
-
 ## Executando o Build da imagem docker local
 
 ```bash
