@@ -90,3 +90,13 @@ $ docker build -t dimdim-backend/backend:0.1 .
 ```bash
 $ docker run --name dimdim-backend -p 8080:8080 -d dimdim-backend/backend:0.1
 ```
+
+## Validando ambiente
+
+```bash
+$docker ps
+
+CONTAINER ID   IMAGE                        COMMAND                  CREATED         STATUS         PORTS                                                  NAMES
+09db16375738   dimdim-backend/backend:0.1   "java -jar /app.jar"     7 minutes ago   Up 7 minutes   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp              dimdim-backend
+74905ac7292d   mysql                        "docker-entrypoint.s…"   7 hours ago     Up 7 hours     0.0.0.0:3306->3306/tcp, :::3306->3306/tcp, 33060/tcp   fiap-mysql
+```
