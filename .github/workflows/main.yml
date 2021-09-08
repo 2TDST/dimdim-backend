@@ -13,6 +13,13 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  REGISTRY_NAME: rg-dimdim
+  CLUSTER_NAME: aks-dimdim-prd
+  CLUSTER_RESOURCE_GROUP: dimdim
+  NAMESPACE: development
+  APP_NAME: dimdim-backend
+
 jobs:
     build-and-deploy:
         runs-on: ubuntu-latest
@@ -29,21 +36,33 @@ jobs:
         - name: 'Build and push image'
           uses: azure/docker-login@v1
           with:
-            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
         - run: |
-            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/dimdim-backend:${{ github.sha }}
-            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/dimdim-backend:${{ github.sha }}
-
-        - name: 'Deploy to Azure Container Instances'
-          uses: 'azure/aci-deploy@v1'
+            docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
+            docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
+            
+        # Set the target AKS cluster.
+        - uses: Azure/k8s-set-context@v1
           with:
-            resource-group: ${{ secrets.RESOURCE_GROUP }}
-            dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
-            image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/dimdim-backend:${{ github.sha }}
-            registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            registry-username: ${{ secrets.REGISTRY_USERNAME }}
-            registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            name: dimdim-backend
-            location: 'west us'
+            kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+        - uses: azure/k8s-create-secret@v1
+          with:
+            container-registry-url: ${{ env.REGISTRY_NAME }}.azurecr.io
+            container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
+            container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+            secret-name: dimdim-k8s-secret
+            arguments: --force true
+            
+        - uses: Azure/k8s-deploy@v1.4
+          with:
+            manifests: |
+              kubefiles/app.deployment.yaml
+              kubefiles/db.deployment.yaml
+            images: |
+              demo.azurecr.io/k8sdemo:${{ github.sha }}
+            imagepullsecrets: |
+              dimdim-k8s-secret
+        
