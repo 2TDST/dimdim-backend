@@ -65,4 +65,28 @@ The app will start running at <http://localhost:8080>.
 
 You can test them using postman or any other rest client.
 
-# dimdim-backend
+# Executando ambiente em Docker
+
+**1.0 Executando local Docker Mysql Container**
+
+```bash
+$ docker run --name fiap-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=ag_dimdim_db -d mysql
+```
+
+**2.0 Executando em seu local Docker, o DIMDIM-BACKEND Container**
+
+## Executando o Build da imagem docker local
+
+```bash
+git clone https://github.com/2TDST/dimdim-backend.git
+cd dimdim-backend
+```
+
+```bash
+$ docker build -t dimdim-backend/backend:0.1 .
+```
+
+## Executando o Container Local
+```bash
+$ docker run --name dimdim-backend -p 8080:8080 -d dimdim-backend/backend:0.1
+```

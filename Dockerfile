@@ -1,9 +1,13 @@
-FROM maven:3.8.1-jdk-11
+FROM maven:3.8.1-jdk-11 AS BUILD
 
-WORKDIR /dimdim-api
+LABEL HubSlashInformationCorp <devops@slashicorp.com.br>
 
 COPY . .
 
-RUN mvn clean install
+RUN mvn package -DskipTests
 
-CMD mvn spring-boot:run
+FROM openjdk:11-jre
+
+COPY --from=BUILD target/*.jar /app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]
