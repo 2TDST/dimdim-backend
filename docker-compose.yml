@@ -17,6 +17,8 @@ services:
     depends_on:
       - mysqldb
     build: .
+    external_links:
+      - dimdim-frontend
     restart: on-failure
     env_file: ./.env
     ports:
@@ -33,6 +35,9 @@ services:
       - .m2:/root/.m2
     stdin_open: true
     tty: true
+
+networks:
+  default:
 
 volumes:
   db:
