@@ -86,6 +86,7 @@ $ docker-compose up -d
 $docker ps
 
 CONTAINER ID   IMAGE                        COMMAND                  CREATED         STATUS         PORTS                                                  NAMES
-09db16375738   dimdim-backend/backend:0.1   "java -jar /app.jar"     7 minutes ago   Up 7 minutes   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp              dimdim-backend
-74905ac7292d   mysql                        "docker-entrypoint.s…"   7 hours ago     Up 7 hours     0.0.0.0:3306->3306/tcp, :::3306->3306/tcp, 33060/tcp   fiap-mysql
+2abba56c2325   dimdim-backend_dimdim-backend     "java -jar /app.jar"     7 minutes ago   Up 7 minutes   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp              dimdim-backend_dimdim-backend_1
+e0517e9359be   mysql:5.7                         "docker-entrypoint.s…"   7 minutes ago   Up 7 minutes   0.0.0.0:3306->3306/tcp, :::3306->3306/tcp, 33060/tcp   dimdim-backend_mysqldb_1
+
 ```
